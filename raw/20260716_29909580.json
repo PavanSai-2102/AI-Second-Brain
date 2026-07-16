@@ -1,0 +1,13 @@
+{
+  "id": "cap_20260716_29909580",
+  "timestamp": "2026-07-16T20:59:26.827357+05:30",
+  "type": "note",
+  "title": "This should auto-detect as a note because it's not...",
+  "content": "This should auto-detect as a note because it's not a URL or file path.",
+  "source_file": null,
+  "metadata": {
+    "word_count": 14,
+    "language": "en",
+    "content_hash": "sha256:8c700930bbef7c730e73bfb5ad7f8c59f24f78b91ce3a09b10d4864259d846b2"
+  }
+}

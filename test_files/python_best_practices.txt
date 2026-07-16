@@ -1,0 +1,19 @@
+Python Best Practices for Clean Code
+
+1. Use meaningful variable names — `user_count` not `uc`
+2. Follow PEP 8 style guidelines consistently
+3. Write docstrings for all public functions and classes
+4. Use type hints (Python 3.10+ syntax: `str | None`)
+5. Keep functions small — each should do one thing
+6. Use pathlib instead of os.path for file operations
+7. Handle exceptions specifically, never bare `except:`
+8. Use virtual environments for project isolation
+9. Pin dependency versions in requirements.txt
+10. Write unit tests alongside your code
+
+Key libraries for AI projects:
+- sentence-transformers: embedding generation
+- groq/openai: LLM API access
+- streamlit: rapid web UI prototyping
+- numpy: numerical computation
+- PyPDF2: PDF text extraction

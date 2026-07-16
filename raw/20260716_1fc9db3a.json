@@ -1,0 +1,13 @@
+{
+  "id": "cap_20260716_1fc9db3a",
+  "timestamp": "2026-07-16T20:58:03.746806+05:30",
+  "type": "link",
+  "title": "all-MiniLM-L6-v2 Model Card",
+  "content": "URL: https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2\n\nsentence-transformers/all-MiniLM-L6-v2 · Hugging Face\nall-MiniLM-L6-v2\nThis is a\nsentence-transformers\nmodel: It maps sentences & paragraphs to a 384 dimensional dense vector space and can be used for tasks like clustering or semantic search.\nUsage (Sentence-Transformers)\nUsing this model becomes easy when you have\nsentence-transformers\ninstalled:\npip install -U sentence-transformers\nThen you can use the model like this:\nfrom\nsentence_transformers\nimport\nSentenceTransformer\nsentences = [\n\"This is an example sentence\"\n,\n\"Each sentence is converted\"\n]\n\nmodel = SentenceTransformer(\n'sentence-transformers/all-MiniLM-L6-v2'\n)\nembeddings = model.encode(sentences)\nprint\n(embeddings)\nUsage (HuggingFace Transformers)\nWithout\nsentence-transformers\n, you can use the model like this: First, you pass your input through the transformer model, then you have to apply the right pooling-operation on-top of the contextualized word embeddings.\nfrom\ntransformers\nimport\nAutoTokenizer, AutoModel\nimport\ntorch\nimport\ntorch.nn.functional\nas\nF\n#Mean Pooling - Take attention mask into account for correct averaging\ndef\nmean_pooling\n(\nmodel_output, attention_mask\n):\n    token_embeddings = model_output[\n0\n]\n#First element of model_output contains all token embeddings\ninput_mask_expanded = attention_mask.unsqueeze(-\n1\n).expand(token_embeddings.size()).\nfloat\n()\nreturn\ntorch.\nsum\n(token_embeddings * input_mask_expanded,\n1\n) / torch.clamp(input_mask_expanded.\nsum\n(\n1\n),\nmin\n=\n1e-9\n)\n# Sentences we want sentence embeddings for\nsentences = [\n'This is an example sentence'\n,\n'Each sentence is converted'\n]\n# Load model from HuggingFace Hub\ntokenizer = AutoTokenizer.from_pretrained(\n'sentence-transformers/all-MiniLM-L6-v2'\n)\nmodel = AutoModel.from_pretrained(\n'sentence-transformers/all-MiniLM-L6-v2'\n)\n# Tokenize sentences\nencoded_input = tokenizer(sentences, padding=\nTrue\n, truncation=\nTrue\n, return_tensors=\n'pt'\n)\n# Compute token embeddings\nwith\ntorch.no_grad():\n    model_output = model(**encoded_input)",
+  "source_file": null,
+  "metadata": {
+    "word_count": 250,
+    "language": "en",
+    "content_hash": "sha256:30c2ef1b961c7101e5df41058b5f0ddbd3dc007003beff84f376d1bff221a82f"
+  }
+}

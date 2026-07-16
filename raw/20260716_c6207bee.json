@@ -1,0 +1,13 @@
+{
+  "id": "cap_20260716_c6207bee",
+  "timestamp": "2026-07-16T20:57:16.494944+05:30",
+  "type": "note",
+  "title": "Vector embeddings transform text into dense numeri...",
+  "content": "Vector embeddings transform text into dense numerical representations that capture semantic meaning. They are the foundation of modern NLP, enabling machines to understand relationships between words, sentences, and documents.",
+  "source_file": null,
+  "metadata": {
+    "word_count": 29,
+    "language": "en",
+    "content_hash": "sha256:78391bf6a8a9966176a689329a95c63638b410cdeebdf368011bac9ce7a67bde"
+  }
+}

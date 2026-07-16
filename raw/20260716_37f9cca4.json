@@ -1,0 +1,13 @@
+{
+  "id": "cap_20260716_37f9cca4",
+  "timestamp": "2026-07-16T20:57:36.066445+05:30",
+  "type": "note",
+  "title": "RAG Pipeline Explained",
+  "content": "Retrieval-Augmented Generation (RAG) combines information retrieval with language model generation. Instead of relying solely on training data, RAG retrieves relevant documents and uses them as context to produce more accurate, grounded responses.",
+  "source_file": null,
+  "metadata": {
+    "word_count": 32,
+    "language": "en",
+    "content_hash": "sha256:25cd3548c37791a8b27b5cc5b3862da776bbf47c6b1ccee030c0248059a93946"
+  }
+}

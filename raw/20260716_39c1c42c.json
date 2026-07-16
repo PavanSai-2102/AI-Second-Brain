@@ -1,0 +1,13 @@
+{
+  "id": "cap_20260716_39c1c42c",
+  "timestamp": "2026-07-16T20:57:42.822914+05:30",
+  "type": "note",
+  "title": "Cosine Similarity in NLP",
+  "content": "Cosine similarity measures the angle between two vectors, returning a value between -1 and 1. A value of 1 means identical direction, 0 means orthogonal, and -1 means opposite. In NLP, it's used to compare document embeddings for semantic similarity.",
+  "source_file": null,
+  "metadata": {
+    "word_count": 40,
+    "language": "en",
+    "content_hash": "sha256:b5ab62579df26fb593a3445483e306f6eaf869fa9058b8851135b94c614ded9a"
+  }
+}

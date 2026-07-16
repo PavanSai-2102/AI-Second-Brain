@@ -1,0 +1,13 @@
+{
+  "id": "cap_20260716_7f92b253",
+  "timestamp": "2026-07-16T20:59:05.961061+05:30",
+  "type": "file",
+  "title": "Knowledge Graphs",
+  "content": "# Knowledge Graph Systems\n\nKnowledge graphs represent information as interconnected entities (nodes) and \nrelationships (edges). They power search engines (Google Knowledge Graph), \nrecommendation systems, and question-answering pipelines.\n\n## Key Concepts\n- **Nodes**: Entities (people, places, concepts)\n- **Edges**: Relationships between entities\n- **Properties**: Attributes attached to nodes or edges\n\n## Applications in Personal Knowledge Management\n- Auto-linking related notes via semantic similarity\n- Visualizing idea clusters and knowledge gaps\n- Enabling graph-based search and traversal\n\nForce-directed graph layouts (like Cytoscape.js's COSE algorithm) use \nphysics simulation to position nodes — connected nodes attract, while \nunconnected nodes repel, creating natural visual clusters.",
+  "source_file": "knowledge_graphs.md",
+  "metadata": {
+    "word_count": 100,
+    "language": "en",
+    "content_hash": "sha256:907bb4dd33ef2e043eee085a6ffeef83e5ac1c34fac5c15dcbd3adcdc9e5ec34"
+  }
+}

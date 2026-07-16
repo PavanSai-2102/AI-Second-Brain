@@ -1,0 +1,13 @@
+{
+  "id": "cap_20260716_28e3dc7e",
+  "timestamp": "2026-07-16T20:59:11.041694+05:30",
+  "type": "file",
+  "title": "Python Best Practices",
+  "content": "Python Best Practices for Clean Code\n\n1. Use meaningful variable names — `user_count` not `uc`\n2. Follow PEP 8 style guidelines consistently\n3. Write docstrings for all public functions and classes\n4. Use type hints (Python 3.10+ syntax: `str | None`)\n5. Keep functions small — each should do one thing\n6. Use pathlib instead of os.path for file operations\n7. Handle exceptions specifically, never bare `except:`\n8. Use virtual environments for project isolation\n9. Pin dependency versions in requirements.txt\n10. Write unit tests alongside your code\n\nKey libraries for AI projects:\n- sentence-transformers: embedding generation\n- groq/openai: LLM API access\n- streamlit: rapid web UI prototyping\n- numpy: numerical computation\n- PyPDF2: PDF text extraction",
+  "source_file": "python_best_practices.txt",
+  "metadata": {
+    "word_count": 116,
+    "language": "en",
+    "content_hash": "sha256:16b6098d572318d154d4d79a034c6d2a95ca64b68fb128cd5ec9b75e5081c5fc"
+  }
+}

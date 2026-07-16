@@ -1,0 +1,13 @@
+{
+  "id": "cap_20260716_f7201cea",
+  "timestamp": "2026-07-16T20:59:15.930488+05:30",
+  "type": "file",
+  "title": "Prompt Engineering",
+  "content": "# LLM Prompt Engineering Tips\n\n## The Art of Prompting\nGetting good results from LLMs is about clear communication. The prompt is \nthe interface between human intent and machine output.\n\n## Key Techniques\n1. **System prompts**: Set the persona and constraints (\"You are a knowledge organizer...\")\n2. **Few-shot examples**: Show 2-3 examples of desired input/output\n3. **Structured output**: Ask for JSON to get parseable responses\n4. **Chain of thought**: \"Think step by step\" improves reasoning\n5. **Temperature control**: Lower (0.1-0.3) for factual, higher (0.7-0.9) for creative\n\n## Anti-Patterns\n- Vague instructions (\"make it better\")\n- Missing context (expecting the LLM to know your specific domain)\n- Ignoring token limits (context window overflow)\n- Not validating structured outputs (JSON parsing failures)\n\n## For Classification Tasks (like PARA)\n- Provide clear category definitions in the system prompt\n- Include examples of each category\n- Ask for confidence scores alongside classifications\n- Use JSON mode for reliable parsing",
+  "source_file": "prompt_engineering.md",
+  "metadata": {
+    "word_count": 155,
+    "language": "en",
+    "content_hash": "sha256:203637b31db6b8c5c15b23305db280efa25b13c5e76349e0f818ee688304b2c6"
+  }
+}

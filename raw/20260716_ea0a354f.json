@@ -1,0 +1,13 @@
+{
+  "id": "cap_20260716_ea0a354f",
+  "timestamp": "2026-07-16T20:57:57.276465+05:30",
+  "type": "link",
+  "title": "Streamlit Main Concepts",
+  "content": "URL: https://docs.streamlit.io/get-started/fundamentals/main-concepts\n\nBasic concepts of Streamlit - Streamlit Docs\nBasic concepts of Streamlit\nWorking with Streamlit is simple. First you sprinkle a few Streamlit commands\ninto a normal Python script, then you run it with\nstreamlit run\n:\nTerminal\nstreamlit run your_script.py [-- script args]\nAs soon as you run the script as shown above, a local Streamlit server will\nspin up and your app will open in a new tab in your default web browser. The app\nis your canvas, where you'll draw charts, text, widgets, tables, and more.\nWhat gets drawn in the app is up to you. For example\nst.text\nwrites raw text to your app, and\nst.line_chart\ndraws — you guessed it — a\nline chart. Refer to our\nAPI documentation\nto see all commands that\nare available to you.\npush_pin\nNote\nWhen passing your script some custom arguments, they must be passed after two dashes. Otherwise the\narguments get interpreted as arguments to Streamlit itself.\nAnother way of running Streamlit is to run it as a Python module. This can be\nuseful when configuring an IDE like PyCharm to work with Streamlit:\nTerminal\n# Running\npython -m streamlit run your_script.py\n\n# is equivalent to:\nstreamlit run your_script.py\nstar\nTip\nYou can also pass a URL to\nstreamlit run\n! This is great when combined with\nGitHub Gists. For example:\nTerminal\nstreamlit run https://raw.githubusercontent.com/streamlit/demo-uber-nyc-pickups/master/streamlit_app.py\nDevelopment flow\nEvery time you want to update your app, save the source file. When you do\nthat, Streamlit detects if there is a change and asks you whether you want to\nrerun your app. Choose \"Always rerun\" at the top-right of your screen to\nautomatically update your app every time you change its source code.\nThis allows you to work in a fast interactive loop: you type some code, save\nit, try it out live, then type some more code, save it, try it out, and so on\nuntil you're happy with the results. This tight loop between coding and viewing\nresults live is one of the ways Streamlit makes your life easier.\nstar\nT",
+  "source_file": null,
+  "metadata": {
+    "word_count": 344,
+    "language": "en",
+    "content_hash": "sha256:2af34ecb5566bfc4037e5295a34828cafb9d77e6918f280f1c8b23be03a9cee7"
+  }
+}

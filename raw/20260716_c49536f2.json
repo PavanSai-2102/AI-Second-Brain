@@ -1,0 +1,13 @@
+{
+  "id": "cap_20260716_c49536f2",
+  "timestamp": "2026-07-16T20:57:49.682646+05:30",
+  "type": "link",
+  "title": "json — JSON encoder and decoder — Python 3.14.6 documentation",
+  "content": "URL: https://docs.python.org/3/library/json.html\n\njson — JSON encoder and decoder — Python 3.14.6 documentation\nNavigation\nindex\nmodules\n|\nnext\n|\nprevious\n|\nPython\n»\n3.14.6 Documentation\n»\nThe Python Standard Library\n»\nInternet Data Handling\n»\njson\n— JSON encoder and decoder\n|\nTheme\nAuto\nLight\nDark\n|\njson\n— JSON encoder and decoder\n¶\nSource code:\nLib/json/__init__.py\nJSON (JavaScript Object Notation)\n, specified by\nRFC 7159\n(which obsoletes\nRFC 4627\n) and by\nECMA-404\n,\nis a lightweight data interchange format inspired by\nJavaScript\nobject literal syntax\n(although it is not a strict subset of JavaScript\n[\n1\n]\n).\nNote\nThe term “object” in the context of JSON processing in Python can be\nambiguous. All values in Python are objects. In JSON, an object refers to\nany data wrapped in curly braces, similar to a Python dictionary.\nWarning\nBe cautious when parsing JSON data from untrusted sources. A malicious\nJSON string may cause the decoder to consume considerable CPU and memory\nresources. Limiting the size of data to be parsed is recommended.\nThis module exposes an API familiar to users of the standard library\nmarshal\nand\npickle\nmodules.\nEncoding basic Python object hierarchies:\n>>>\nimport\njson\n>>>\njson\n.\ndumps\n([\n'foo'\n,\n{\n'bar'\n:\n(\n'baz'\n,\nNone\n,\n1.0\n,\n2\n)}])\n'[\"foo\", {\"bar\": [\"baz\", null, 1.0, 2]}]'\n>>>\nprint\n(\njson\n.\ndumps\n(\n\"\n\\\"\nfoo\n\\b\nar\"\n))\n\"\\\"foo\\bar\"\n>>>\nprint\n(\njson\n.\ndumps\n(\n'\n\\u1234\n'\n))\n\"\\u1234\"\n>>>\nprint\n(\njson\n.\ndumps\n(\n'\n\\\\\n'\n))\n\"\\\\\"\n>>>\nprint\n(\njson\n.\ndumps\n({\n\"c\"\n:\n0\n,\n\"b\"\n:\n0\n,\n\"a\"\n:\n0\n},\nsort_keys\n=\nTrue\n))\n{\"a\": 0, \"b\": 0, \"c\": 0}\n>>>\nfrom\nio\nimport\nStringIO\n>>>\nio\n=\nStringIO\n()\n>>>\njson\n.\ndump\n([\n'streaming API'\n],\nio\n)\n>>>\nio\n.\ngetvalue\n()\n'[\"streaming API\"]'\nCompact encoding:\n>>>\nimport\njson\n>>>\njson\n.\ndumps\n([\n1\n,\n2\n,\n3\n,\n{\n'4'\n:\n5\n,\n'6'\n:\n7\n}],\nseparators\n=\n(\n','\n,\n':'\n))\n'[1,2,3,{\"4\":5,\"6\":7}]'\nPretty printing:\n>>>\nimport\njson\n>>>\nprint\n(\njson\n.\ndumps\n({\n'6'\n:\n7\n,\n'4'\n:\n5\n},\nsort_keys\n=\nTrue\n,\nindent\n=\n4\n))\n{\n\"4\": 5,\n\"6\": 7\n}\nCustomizing JSON object encoding:\n>>>\nimport\njson\n>>>\ndef\ncustom_json\n(",
+  "source_file": null,
+  "metadata": {
+    "word_count": 393,
+    "language": "en",
+    "content_hash": "sha256:e5de8de858cdb610e973a5f07e65f4962a055f6aaf44f3d04a61cbb5251c276a"
+  }
+}
