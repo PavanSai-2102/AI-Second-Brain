@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecondSelf — Knowledge Graph</title>
+    <!-- Load Cytoscape.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.min.js"></script>
+    <style>
+        :root {
+            /* Base Colors */
+            --bg-color: #0f1115;
+            --text-color: #e2e8f0;
+            --panel-bg: rgba(20, 24, 32, 0.85);
+            --border-color: #334155;
+            
+            /* PARA Colors */
+            --projects-color: #8B5CF6; /* Purple */
+            --areas-color: #3B82F6;    /* Blue */
+            --resources-color: #10B981;/* Green */
+            --archives-color: #F59E0B; /* Orange */
+        }
+        
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        #cy {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        /* Overlay Elements */
+        .overlay {
+            position: absolute;
+            z-index: 10;
+            background-color: var(--panel-bg);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Legend Panel */
+        #legend {
+            bottom: 20px;
+            right: 20px;
+            min-width: 150px;
+        }
+
+        #legend h3 {
+            margin: 0 0 12px 0;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #94a3b8;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        /* Tooltip Panel */
+        #tooltip {
+            top: 20px;
+            left: 20px;
+            width: 320px;
+            display: none;
+            transition: opacity 0.2s ease;
+        }
+
+        #tooltip h2 {
+            margin: 0 0 8px 0;
+            font-size: 18px;
+            line-height: 1.3;
+        }
+
+        #tooltip .meta {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #tooltip .summary {
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 16px;
+            color: #cbd5e1;
+        }
+
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 12px;
+        }
+
+        .tag {
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 11px;
+            color: #94a3b8;
+        }
+
+        /* Controls Panel */
+        #controls {
+            bottom: 20px;
+            left: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            background-color: rgba(255,255,255,0.1);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: rgba(255,255,255,0.2);
+        }
+        
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 100;
+            font-size: 18px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loading">Building Knowledge Graph...</div>
+    <div id="cy"></div>
+
+    <!-- Tooltip (Hidden by default) -->
+    <div id="tooltip" class="overlay">
+        <h2 id="tt-title">Note Title</h2>
+        <div class="meta">
+            <span id="tt-date">Date</span>
+            <span id="tt-links">0 connections</span>
+        </div>
+        <div id="tt-summary" class="summary">Summary goes here.</div>
+        <div id="tt-tags" class="tags-container"></div>
+    </div>
+
+    <!-- Legend -->
+    <div id="legend" class="overlay">
+        <h3>Categories</h3>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: var(--projects-color); box-shadow: 0 0 8px var(--projects-color);"></div>
+            <span>Projects</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: var(--areas-color); box-shadow: 0 0 8px var(--areas-color);"></div>
+            <span>Areas</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: var(--resources-color); box-shadow: 0 0 8px var(--resources-color);"></div>
+            <span>Resources</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: var(--archives-color); box-shadow: 0 0 8px var(--archives-color);"></div>
+            <span>Archives</span>
+        </div>
+    </div>
+
+    <!-- Controls -->
+    <div id="controls" class="overlay">
+        <button id="btn-fit">Fit View</button>
+        <button id="btn-layout">Re-run Layout</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Fetch the graph data
+            fetch('graph.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Failed to load graph.json");
+                    }
+                    return response.json();
+                })
+                .then(data => initGraph(data))
+                .catch(error => {
+                    document.getElementById('loading').innerHTML = `
+                        ❌ Error loading graph data<br>
+                        <span style="font-size:14px;color:#94a3b8;margin-top:10px;display:block;">
+                        Did you run <code>python build_graph.py</code> first?
+                        </span>
+                    `;
+                    console.error('Error:', error);
+                });
+
+            function initGraph(graphData) {
+                document.getElementById('loading').style.display = 'none';
+                
+                // If the graph is completely empty (EC-3.1.1)
+                if (graphData.nodes.length === 0) {
+                    document.getElementById('loading').style.display = 'block';
+                    document.getElementById('loading').innerHTML = `
+                        📭 Your knowledge graph is empty.<br>
+                        <span style="font-size:14px;color:#94a3b8;margin-top:10px;display:block;">
+                        Capture some notes and run <code>python link.py</code> to build connections.
+                        </span>
+                    `;
+                    return;
+                }
+
+                // Transform data format for Cytoscape
+                const cyElements = [];
+                
+                // Process Nodes
+                graphData.nodes.forEach(n => {
+                    cyElements.push({
+                        group: 'nodes',
+                        data: {
+                            id: n.id,
+                            label: n.label,
+                            full_title: n.full_title,
+                            category: n.category,
+                            summary: n.summary,
+                            tags: n.tags,
+                            created: n.created,
+                            link_count: n.link_count || 0
+                        }
+                    });
+                });
+                
+                // Process Edges
+                graphData.edges.forEach(e => {
+                    cyElements.push({
+                        group: 'edges',
+                        data: {
+                            source: e.source,
+                            target: e.target,
+                            similarity: e.similarity
+                        }
+                    });
+                });
+
+                // Initialize Cytoscape
+                const cy = cytoscape({
+                    container: document.getElementById('cy'),
+                    elements: cyElements,
+                    
+                    style: [
+                        {
+                            selector: 'node',
+                            style: {
+                                'label': 'data(label)',
+                                'color': '#ffffff',
+                                'text-valign': 'bottom',
+                                'text-margin-y': 8,
+                                'font-size': '11px',
+                                'font-family': 'Inter, sans-serif',
+                                'text-outline-width': 2,
+                                'text-outline-color': '#0f1115',
+                                
+                                // Base node size + scaled by link count
+                                'width': 'mapData(link_count, 0, 10, 20, 50)',
+                                'height': 'mapData(link_count, 0, 10, 20, 50)',
+                                
+                                // Glowing effect
+                                'border-width': 2,
+                                'border-color': 'rgba(255,255,255,0.8)',
+                                'shadow-blur': 15,
+                                'shadow-opacity': 0.8,
+                                'shadow-color': '#ffffff'
+                            }
+                        },
+                        // Category colors
+                        {
+                            selector: 'node[category = "projects"]',
+                            style: {
+                                'background-color': 'var(--projects-color)',
+                                'shadow-color': 'var(--projects-color)'
+                            }
+                        },
+                        {
+                            selector: 'node[category = "areas"]',
+                            style: {
+                                'background-color': 'var(--areas-color)',
+                                'shadow-color': 'var(--areas-color)'
+                            }
+                        },
+                        {
+                            selector: 'node[category = "resources"]',
+                            style: {
+                                'background-color': 'var(--resources-color)',
+                                'shadow-color': 'var(--resources-color)'
+                            }
+                        },
+                        {
+                            selector: 'node[category = "archives"]',
+                            style: {
+                                'background-color': 'var(--archives-color)',
+                                'shadow-color': 'var(--archives-color)'
+                            }
+                        },
+                        // Edge styles
+                        {
+                            selector: 'edge',
+                            style: {
+                                // Width scales with similarity (e.g. 0.3 -> 1px, 0.9 -> 5px)
+                                'width': 'mapData(similarity, 0.3, 1.0, 1, 5)',
+                                'line-color': '#475569',
+                                'curve-style': 'bezier',
+                                'opacity': 0.6
+                            }
+                        },
+                        // Interaction states
+                        {
+                            selector: 'node.highlight',
+                            style: {
+                                'border-width': 4,
+                                'border-color': '#ffffff',
+                                'shadow-blur': 25
+                            }
+                        },
+                        {
+                            selector: 'node.dim',
+                            style: {
+                                'opacity': 0.2
+                            }
+                        },
+                        {
+                            selector: 'edge.highlight',
+                            style: {
+                                'line-color': '#94a3b8',
+                                'opacity': 1.0
+                            }
+                        },
+                        {
+                            selector: 'edge.dim',
+                            style: {
+                                'opacity': 0.1
+                            }
+                        }
+                    ],
+
+                    layout: getLayoutConfig(graphData.nodes.length)
+                });
+
+                // Layout configuration logic
+                function getLayoutConfig(nodeCount) {
+                    // Disable animations for very large graphs to maintain performance (EC-3.2.2)
+                    const animate = nodeCount < 100;
+                    return {
+                        name: 'cose',
+                        animate: animate,
+                        animationDuration: 1000,
+                        nodeRepulsion: 400000,
+                        idealEdgeLength: 100,
+                        edgeElasticity: 100,
+                        nestingFactor: 5,
+                        gravity: 250,
+                        numIter: 1000,
+                        padding: 50
+                    };
+                }
+
+                // Interactions
+
+                // Hover (Show tooltip)
+                cy.on('mouseover', 'node', function(e) {
+                    const node = e.target;
+                    const data = node.data();
+                    
+                    // Populate tooltip
+                    document.getElementById('tt-title').textContent = data.full_title;
+                    
+                    // Format date nicely if available
+                    let dateStr = "Unknown date";
+                    if (data.created) {
+                        try {
+                            const d = new Date(data.created);
+                            dateStr = d.toLocaleDateString();
+                        } catch(e) {}
+                    }
+                    document.getElementById('tt-date').textContent = dateStr;
+                    
+                    document.getElementById('tt-links').textContent = 
+                        `${data.link_count} connection${data.link_count !== 1 ? 's' : ''}`;
+                        
+                    document.getElementById('tt-summary').textContent = data.summary;
+                    
+                    // Add tags
+                    const tagsContainer = document.getElementById('tt-tags');
+                    tagsContainer.innerHTML = '';
+                    if (data.tags && data.tags.length > 0) {
+                        data.tags.forEach(tag => {
+                            const span = document.createElement('span');
+                            span.className = 'tag';
+                            span.textContent = '#' + tag;
+                            tagsContainer.appendChild(span);
+                        });
+                    }
+                    
+                    // Show tooltip
+                    const tooltip = document.getElementById('tooltip');
+                    tooltip.style.display = 'block';
+                    
+                    // Cursor style
+                    document.getElementById('cy').style.cursor = 'pointer';
+                });
+
+                cy.on('mouseout', 'node', function(e) {
+                    document.getElementById('tooltip').style.display = 'none';
+                    document.getElementById('cy').style.cursor = 'default';
+                });
+
+                // Click (Highlight connected neighbors)
+                cy.on('tap', 'node', function(e) {
+                    const node = e.target;
+                    
+                    // Reset all
+                    cy.elements().removeClass('highlight dim');
+                    
+                    // Highlight selected node, its neighborhood, and connecting edges
+                    const neighborhood = node.neighborhood();
+                    
+                    cy.elements().difference(neighborhood).not(node).addClass('dim');
+                    node.addClass('highlight');
+                    neighborhood.addClass('highlight');
+                });
+                
+                // Click background to reset
+                cy.on('tap', function(e) {
+                    if (e.target === cy) {
+                        cy.elements().removeClass('highlight dim');
+                    }
+                });
+
+                // Double click to fit node
+                cy.on('dblclick', 'node', function(e) {
+                    const node = e.target;
+                    cy.animate({
+                        fit: {
+                            eles: node,
+                            padding: 200
+                        },
+                        duration: 500
+                    });
+                });
+
+                // Button Controls
+                document.getElementById('btn-fit').addEventListener('click', () => {
+                    cy.animate({
+                        fit: { padding: 50 },
+                        duration: 500
+                    });
+                });
+
+                document.getElementById('btn-layout').addEventListener('click', () => {
+                    cy.layout(getLayoutConfig(graphData.nodes.length)).run();
+                });
+            }
+        });
+    </script>
+</body>
+</html>

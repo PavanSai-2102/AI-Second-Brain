@@ -1,0 +1,199 @@
+{
+  "metadata": {
+    "generated_at": "2026-07-18T08:08:41.823378+05:30",
+    "total_nodes": 11,
+    "total_edges": 4
+  },
+  "nodes": [
+    {
+      "id": "cap_20260716_ea0a354f",
+      "label": "Streamlit Main Concepts",
+      "full_title": "Streamlit Main Concepts",
+      "category": "resources",
+      "tags": [
+        "Streamlit",
+        "Python",
+        "Web Development",
+        "Data Science"
+      ],
+      "summary": "Introduction to Streamlit fundamentals and main concepts",
+      "content_preview": "URL: https://docs.streamlit.io/get-started/fundamentals/main-concepts\n\nBasic concepts of Streamlit - Streamlit Docs\nBasic concepts of Streamlit\nWorking with Streamlit is simple. First you sprinkle a f...",
+      "created": "2026-07-16T20:57:57.276465+05:30",
+      "link_count": 1
+    },
+    {
+      "id": "cap_20260716_39c1c42c",
+      "label": "Cosine Similarity in NLP",
+      "full_title": "Cosine Similarity in NLP",
+      "category": "resources",
+      "tags": [
+        "cosine similarity",
+        "NLP",
+        "vector comparison"
+      ],
+      "summary": "Cosine similarity explanation for NLP applications",
+      "content_preview": "Cosine similarity measures the angle between two vectors, returning a value between -1 and 1. A value of 1 means identical direction, 0 means orthogonal, and -1 means opposite. In NLP, it's used to co...",
+      "created": "2026-07-16T20:57:42.822914+05:30",
+      "link_count": 1
+    },
+    {
+      "id": "cap_20260716_29909580",
+      "label": "This should auto-detec...",
+      "full_title": "This should auto-detect as a note because it's not...",
+      "category": "resources",
+      "tags": [
+        "notes",
+        "reference"
+      ],
+      "summary": "Information about auto-detection of notes",
+      "content_preview": "This should auto-detect as a note because it's not a URL or file path.",
+      "created": "2026-07-16T20:59:26.827357+05:30",
+      "link_count": 0
+    },
+    {
+      "id": "cap_20260716_c6207bee",
+      "label": "Vector embeddings tran...",
+      "full_title": "Vector embeddings transform text into dense numeri...",
+      "category": "resources",
+      "tags": [
+        "NLP",
+        "vector embeddings",
+        "text representation"
+      ],
+      "summary": "Vector embeddings transform text into dense numerical representations",
+      "content_preview": "Vector embeddings transform text into dense numerical representations that capture semantic meaning. They are the foundation of modern NLP, enabling machines to understand relationships between words,...",
+      "created": "2026-07-16T20:57:16.494944+05:30",
+      "link_count": 2
+    },
+    {
+      "id": "cap_20260716_28e3dc7e",
+      "label": "Python Best Practices",
+      "full_title": "Python Best Practices",
+      "category": "resources",
+      "tags": [
+        "python",
+        "best practices",
+        "clean code",
+        "ai projects"
+      ],
+      "summary": "Guidelines for writing clean and maintainable Python code",
+      "content_preview": "Python Best Practices for Clean Code\n\n1. Use meaningful variable names — `user_count` not `uc`\n2. Follow PEP 8 style guidelines consistently\n3. Write docstrings for all public functions and classes\n4....",
+      "created": "2026-07-16T20:59:11.041694+05:30",
+      "link_count": 0
+    },
+    {
+      "id": "cap_20260716_7f92b253",
+      "label": "Knowledge Graphs",
+      "full_title": "Knowledge Graphs",
+      "category": "resources",
+      "tags": [
+        "Knowledge Graph",
+        "Information Retrieval",
+        "Personal Knowledge Management"
+      ],
+      "summary": "Overview of knowledge graph systems and their applications",
+      "content_preview": "# Knowledge Graph Systems\n\nKnowledge graphs represent information as interconnected entities (nodes) and \nrelationships (edges). They power search engines (Google Knowledge Graph), \nrecommendation sys...",
+      "created": "2026-07-16T20:59:05.961061+05:30",
+      "link_count": 0
+    },
+    {
+      "id": "cap_20260716_f7201cea",
+      "label": "Prompt Engineering",
+      "full_title": "Prompt Engineering",
+      "category": "resources",
+      "tags": [
+        "LLM",
+        "prompt engineering",
+        "PARA method"
+      ],
+      "summary": "Guidelines for effective LLM prompt engineering",
+      "content_preview": "# LLM Prompt Engineering Tips\n\n## The Art of Prompting\nGetting good results from LLMs is about clear communication. The prompt is \nthe interface between human intent and machine output.\n\n## Key Techni...",
+      "created": "2026-07-16T20:59:15.930488+05:30",
+      "link_count": 0
+    },
+    {
+      "id": "cap_20260716_99bda3a6",
+      "label": "PARA Method Overview",
+      "full_title": "PARA Method Overview",
+      "category": "resources",
+      "tags": [
+        "PARA method",
+        "information organization",
+        "Tiago Forte"
+      ],
+      "summary": "Overview of the PARA method for information organization",
+      "content_preview": "The PARA method organizes information into four categories: Projects (active goals), Areas (ongoing responsibilities), Resources (reference material), and Archives (completed items). Created by Tiago ...",
+      "created": "2026-07-16T20:57:26.587779+05:30",
+      "link_count": 0
+    },
+    {
+      "id": "cap_20260716_c49536f2",
+      "label": "json — JSON encoder an...",
+      "full_title": "json — JSON encoder and decoder — Python 3.14.6 documentation",
+      "category": "resources",
+      "tags": [
+        "python",
+        "json",
+        "encoding",
+        "decoding"
+      ],
+      "summary": "Official Python documentation for JSON encoder and decoder",
+      "content_preview": "URL: https://docs.python.org/3/library/json.html\n\njson — JSON encoder and decoder — Python 3.14.6 documentation\nNavigation\nindex\nmodules\n|\nnext\n|\nprevious\n|\nPython\n»\n3.14.6 Documentation\n»\nThe Python ...",
+      "created": "2026-07-16T20:57:49.682646+05:30",
+      "link_count": 1
+    },
+    {
+      "id": "cap_20260716_1fc9db3a",
+      "label": "all-MiniLM-L6-v2 Model...",
+      "full_title": "all-MiniLM-L6-v2 Model Card",
+      "category": "resources",
+      "tags": [
+        "sentence-transformers",
+        "Hugging Face",
+        "language models",
+        "NLP"
+      ],
+      "summary": "A language model for sentence embeddings and semantic search",
+      "content_preview": "URL: https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2\n\nsentence-transformers/all-MiniLM-L6-v2 · Hugging Face\nall-MiniLM-L6-v2\nThis is a\nsentence-transformers\nmodel: It maps sentences & pa...",
+      "created": "2026-07-16T20:58:03.746806+05:30",
+      "link_count": 2
+    },
+    {
+      "id": "cap_20260716_37f9cca4",
+      "label": "RAG Pipeline Explained",
+      "full_title": "RAG Pipeline Explained",
+      "category": "resources",
+      "tags": [
+        "RAG",
+        "language models",
+        "information retrieval"
+      ],
+      "summary": "Description of Retrieval-Augmented Generation (RAG) technique",
+      "content_preview": "Retrieval-Augmented Generation (RAG) combines information retrieval with language model generation. Instead of relying solely on training data, RAG retrieves relevant documents and uses them as contex...",
+      "created": "2026-07-16T20:57:36.066445+05:30",
+      "link_count": 1
+    }
+  ],
+  "edges": [
+    {
+      "source": "cap_20260716_ea0a354f",
+      "target": "cap_20260716_c49536f2",
+      "similarity": 0.337
+    },
+    {
+      "source": "cap_20260716_39c1c42c",
+      "target": "cap_20260716_c6207bee",
+      "similarity": 0.443
+    },
+    {
+      "source": "cap_20260716_c6207bee",
+      "target": "cap_20260716_1fc9db3a",
+      "similarity": 0.379
+    },
+    {
+      "source": "cap_20260716_1fc9db3a",
+      "target": "cap_20260716_37f9cca4",
+      "similarity": 0.422
+    }
+  ]
+}
