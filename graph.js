@@ -1,4 +1,4 @@
-{
+const graphData = {
   "metadata": {
     "generated_at": "2026-07-18T08:13:20.150425+05:30",
     "total_nodes": 11,
@@ -196,4 +196,4 @@
       "similarity": 0.422
     }
   ]
-}
+};

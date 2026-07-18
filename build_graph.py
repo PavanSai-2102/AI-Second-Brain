@@ -184,11 +184,17 @@ def build_graph(print_stats_only: bool = False):
         "edges": edges
     }
     
-    # Save to graph.json
+    # Save to graph.json and graph.js
     try:
         with open(config.GRAPH_JSON_PATH, "w", encoding="utf-8") as f:
             json.dump(graph_data, f, indent=2, ensure_ascii=False)
-        print(f"✨ Successfully generated {config.GRAPH_JSON_PATH.name}")
+            
+        # Write JS version for local file:// viewing
+        js_path = config.GRAPH_JSON_PATH.with_suffix('.js')
+        with open(js_path, "w", encoding="utf-8") as f:
+            f.write("const graphData = " + json.dumps(graph_data, indent=2, ensure_ascii=False) + ";")
+            
+        print(f"✨ Successfully generated {config.GRAPH_JSON_PATH.name} and {js_path.name}")
         print(f"   Nodes: {len(nodes)} | Edges: {len(edges)}")
     except Exception as e:
         print(f"❌ Error writing graph.json: {e}")

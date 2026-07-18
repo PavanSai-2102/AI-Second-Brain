@@ -6,6 +6,8 @@
     <title>SecondSelf — Knowledge Graph</title>
     <!-- Load Cytoscape.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.min.js"></script>
+    <!-- Load Graph Data (bypasses local CORS) -->
+    <script src="graph.js"></script>
     <style>
         :root {
             /* Base Colors */
@@ -207,24 +209,17 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Fetch the graph data
-            fetch('graph.json')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error("Failed to load graph.json");
-                    }
-                    return response.json();
-                })
-                .then(data => initGraph(data))
-                .catch(error => {
-                    document.getElementById('loading').innerHTML = `
-                        ❌ Error loading graph data<br>
-                        <span style="font-size:14px;color:#94a3b8;margin-top:10px;display:block;">
-                        Did you run <code>python build_graph.py</code> first?
-                        </span>
-                    `;
-                    console.error('Error:', error);
-                });
+            // Check if graphData is loaded from graph.js
+            if (typeof graphData !== 'undefined') {
+                initGraph(graphData);
+            } else {
+                document.getElementById('loading').innerHTML = `
+                    ❌ Error loading graph data<br>
+                    <span style="font-size:14px;color:#94a3b8;margin-top:10px;display:block;">
+                    Did you run <code>python build_graph.py</code> first?
+                    </span>
+                `;
+            }
 
             function initGraph(graphData) {
                 document.getElementById('loading').style.display = 'none';
