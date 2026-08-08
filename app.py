@@ -162,6 +162,8 @@ with st.sidebar:
     
     # Capture Form
     st.subheader("📥 Capture Knowledge")
+    st.caption("⚠️ *Note: On Streamlit Cloud, captured data is temporary.*")
+    
     capture_input = st.text_area(
         "Content", 
         placeholder="Paste text, thoughts, or URLs here...",
@@ -237,9 +239,12 @@ with tab1:
             with open("graph.json", "r", encoding="utf-8") as f:
                 graph_json_str = f.read()
                 
-            # Inject directly into the head
+            # Replace local script tag directly with inline JSON payload
             injection = f"<script>const graphData = {graph_json_str};</script>"
-            html_content = html_content.replace("</head>", f"{injection}\n</head>")
+            if '<script src="graph.js"></script>' in html_content:
+                html_content = html_content.replace('<script src="graph.js"></script>', injection)
+            else:
+                html_content = html_content.replace("</head>", f"{injection}\n</head>")
             
             components.html(html_content, height=650, scrolling=False)
         except FileNotFoundError:
@@ -255,6 +260,10 @@ with tab2:
     # Init session state for chat history
     if "chat_history" not in st.session_state:
         st.session_state.chat_history = []
+        
+    if not os.getenv("GROQ_API_KEY"):
+        st.warning("⚠️ **GROQ_API_KEY is missing!** Please add it to your Streamlit App Secrets to use the Oracle.")
+        st.stop()
         
     # Input box
     question = st.chat_input("What do you want to know about your notes?")
