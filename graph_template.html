@@ -4,29 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SecondSelf — Knowledge Graph</title>
-    <!-- Load Cytoscape.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.min.js"></script>
-    <!-- Load Graph Data (bypasses local CORS) -->
     <script src="graph.js"></script>
     <style>
         :root {
-            /* Rich Dark Background & Glass Panels */
-            --bg-gradient-start: #131a2c;
-            --bg-gradient-end: #090c15;
+            --bg-gradient-start: #0a0a0a;
+            --bg-gradient-end: #000000;
             --text-color: #f8fafc;
-            --panel-bg: rgba(15, 23, 42, 0.82);
-            --border-color: rgba(255, 255, 255, 0.12);
+            --panel-bg: rgba(20, 20, 20, 0.9);
+            --border-color: rgba(255, 255, 255, 0.1);
             
-            /* Vibrant PARA Color Palette matching screenshot */
-            --projects-color: #3B82F6; /* Vibrant Sky Blue */
-            --areas-color: #10B981;    /* Emerald Green */
-            --resources-color: #FF5252;/* Glowing Coral Red/Orange */
-            --archives-color: #F59E0B; /* Amber Yellow */
+            --projects-color: #3B82F6;
+            --areas-color: #10B981;
+            --resources-color: #FF5252;
+            --archives-color: #F59E0B;
         }
         
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
         
         body, html {
             margin: 0;
@@ -34,9 +28,9 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background: radial-gradient(circle at 50% 50%, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+            background: var(--bg-gradient-end);
             color: var(--text-color);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
 
         #cy {
@@ -48,78 +42,6 @@
             z-index: 1;
         }
 
-        /* Top Header Bar */
-        .top-header {
-            position: absolute;
-            top: 16px;
-            left: 16px;
-            right: 16px;
-            height: 52px;
-            z-index: 20;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 24px;
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
-            font-size: 14px;
-        }
-
-        .header-title {
-            font-weight: 600;
-            font-size: 16px;
-            color: #ffffff;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .header-title .brand {
-            font-weight: 700;
-            letter-spacing: 0.02em;
-        }
-
-        .header-title .divider {
-            color: #64748b;
-        }
-
-        .header-legend {
-            display: flex;
-            align-items: center;
-            gap: 24px;
-            font-weight: 500;
-            color: #cbd5e1;
-        }
-
-        .legend-pill {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            display: inline-block;
-        }
-
-        .dot.projects { background-color: var(--projects-color); box-shadow: 0 0 10px var(--projects-color); }
-        .dot.areas { background-color: var(--areas-color); box-shadow: 0 0 10px var(--areas-color); }
-        .dot.resources { background-color: var(--resources-color); box-shadow: 0 0 10px var(--resources-color); }
-        .dot.archives { background-color: var(--archives-color); box-shadow: 0 0 10px var(--archives-color); }
-
-        .header-stats {
-            color: #94a3b8;
-            font-size: 13px;
-            font-weight: 500;
-        }
-
-        /* Overlay Panels */
         .overlay {
             position: absolute;
             z-index: 10;
@@ -127,31 +49,30 @@
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--border-color);
-            border-radius: 10px;
+            border-radius: 8px;
             padding: 16px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
         }
 
-        /* Tooltip Panel (Moved down to account for Header Bar) */
         #tooltip {
-            top: 84px;
-            left: 20px;
-            width: 330px;
+            top: 16px;
+            left: 16px;
+            width: 300px;
             display: none;
             transition: opacity 0.2s ease;
         }
 
         #tooltip h2 {
             margin: 0 0 8px 0;
-            font-size: 18px;
-            font-weight: 600;
+            font-size: 16px;
+            font-weight: 500;
             line-height: 1.3;
             color: #ffffff;
         }
 
         #tooltip .meta {
             font-size: 12px;
-            color: #94a3b8;
+            color: #888;
             margin-bottom: 12px;
             display: flex;
             justify-content: space-between;
@@ -160,10 +81,10 @@
         }
 
         #tooltip .summary {
-            font-size: 13.5px;
-            line-height: 1.55;
+            font-size: 13px;
+            line-height: 1.5;
             margin-bottom: 16px;
-            color: #e2e8f0;
+            color: #ccc;
         }
 
         .tags-container {
@@ -174,39 +95,35 @@
         }
 
         .tag {
-            background-color: rgba(59, 130, 246, 0.15);
-            border: 1px solid rgba(59, 130, 246, 0.3);
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 4px;
-            padding: 2px 8px;
-            font-size: 11px;
-            color: #60a5fa;
-            font-weight: 500;
+            padding: 2px 6px;
+            font-size: 10px;
+            color: #aaa;
         }
 
-        /* Controls Panel */
         #controls {
-            bottom: 24px;
-            right: 24px;
+            bottom: 16px;
+            left: 16px;
             display: flex;
-            gap: 10px;
+            gap: 8px;
         }
 
         button {
-            background-color: rgba(255, 255, 255, 0.08);
-            color: var(--text-color);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 8px;
-            padding: 8px 14px;
+            background-color: rgba(255, 255, 255, 0.05);
+            color: #aaa;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            padding: 6px 12px;
             cursor: pointer;
-            font-size: 13px;
-            font-weight: 500;
+            font-size: 12px;
             transition: all 0.2s ease;
         }
 
         button:hover {
-            background-color: rgba(255, 255, 255, 0.16);
-            border-color: rgba(255, 255, 255, 0.3);
-            transform: translateY(-1px);
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #fff;
         }
         
         #loading {
@@ -215,32 +132,16 @@
             left: 50%;
             transform: translate(-50%, -50%);
             z-index: 100;
-            font-size: 18px;
-            font-weight: 500;
-            text-align: center;
+            font-size: 14px;
+            color: #888;
         }
     </style>
 </head>
 <body>
 
-    <!-- Sleek Header Bar -->
-    <div id="top-bar" class="top-header">
-        <div class="header-title">
-            <span class="brand">SecondSelf</span> <span class="divider">·</span> Knowledge Graph
-        </div>
-        <div class="header-legend">
-            <div class="legend-pill"><span class="dot projects"></span>Projects</div>
-            <div class="legend-pill"><span class="dot areas"></span>Areas</div>
-            <div class="legend-pill"><span class="dot resources"></span>Resources</div>
-            <div class="legend-pill"><span class="dot archives"></span>Archives</div>
-        </div>
-        <div id="header-stats" class="header-stats">Loading stats...</div>
-    </div>
-
     <div id="loading">Building Knowledge Graph...</div>
     <div id="cy"></div>
 
-    <!-- Tooltip (Hidden by default) -->
     <div id="tooltip" class="overlay">
         <h2 id="tt-title">Note Title</h2>
         <div class="meta">
@@ -251,7 +152,6 @@
         <div id="tt-tags" class="tags-container"></div>
     </div>
 
-    <!-- Controls -->
     <div id="controls" class="overlay">
         <button id="btn-fit">Fit View</button>
         <button id="btn-layout">Re-run Layout</button>
@@ -259,51 +159,31 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Check if graphData is loaded from graph.js or Streamlit injection
             if (typeof graphData !== 'undefined') {
                 initGraph(graphData);
             } else {
-                document.getElementById('loading').innerHTML = `
-                    ❌ Error loading graph data<br>
-                    <span style="font-size:14px;color:#94a3b8;margin-top:10px;display:block;">
-                    Did you run <code>python build_graph.py</code> first?
-                    </span>
-                `;
+                document.getElementById('loading').innerHTML = `Error loading graph data`;
             }
 
             function initGraph(graphData) {
                 document.getElementById('loading').style.display = 'none';
-                
-                // Update Top Header Stats dynamically
-                const todayStr = new Date().toISOString().split('T')[0];
-                document.getElementById('header-stats').textContent = 
-                    `${graphData.nodes.length} nodes · ${graphData.edges.length} edges · built ${todayStr}`;
-                
-                // If the graph is completely empty
                 if (graphData.nodes.length === 0) {
                     document.getElementById('loading').style.display = 'block';
-                    document.getElementById('loading').innerHTML = `
-                        📭 Your knowledge graph is empty.<br>
-                        <span style="font-size:14px;color:#94a3b8;margin-top:10px;display:block;">
-                        Capture some notes and run <code>python link.py</code> to build connections.
-                        </span>
-                    `;
+                    document.getElementById('loading').innerHTML = `Graph is empty`;
                     return;
                 }
 
                 const categoryColors = {
-                    'projects': '#3B82F6',  // Vibrant Sky Blue
-                    'areas': '#10B981',     // Emerald Green
-                    'resources': '#FF5252', // Coral Red
-                    'archives': '#F59E0B'   // Amber
+                    'projects': '#3B82F6',
+                    'areas': '#10B981',
+                    'resources': '#FF5252',
+                    'archives': '#F59E0B'
                 };
 
-                // Transform data format for Cytoscape
                 const cyElements = [];
                 const nodeColorMap = {};
                 const nodeCategoryMap = {};
                 
-                // Process Nodes
                 graphData.nodes.forEach(n => {
                     const nodeColor = categoryColors[n.category] || '#94a3b8';
                     nodeColorMap[n.id] = nodeColor;
@@ -324,11 +204,9 @@
                     });
                 });
                 
-                // Process Edges (with valid gradient color formatting)
                 graphData.edges.forEach(e => {
                     const sColor = nodeColorMap[e.source] || '#475569';
                     const tColor = nodeColorMap[e.target] || '#475569';
-                    const sCat = nodeCategoryMap[e.source] || 'archives';
                     
                     cyElements.push({
                         group: 'edges',
@@ -338,177 +216,72 @@
                             similarity: e.similarity,
                             source_color: sColor,
                             target_color: tColor,
-                            source_cat: sCat,
                             gradient_colors: `${sColor} ${tColor}`
                         }
                     });
                 });
 
-                // Initialize Cytoscape with rock-solid selector styles
                 const cy = cytoscape({
                     container: document.getElementById('cy'),
                     elements: cyElements,
-                    
                     style: [
                         {
                             selector: 'node',
                             style: {
                                 'label': 'data(label)',
-                                'color': '#ffffff',
+                                'color': '#888',
                                 'text-valign': 'bottom',
-                                'text-margin-y': 9,
-                                'font-size': '11.5px',
-                                'font-weight': '500',
-                                'font-family': '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-                                'text-outline-width': 2.5,
-                                'text-outline-color': '#0f131f',
-                                
-                                // Glowing sphere sizing
-                                'width': 'mapData(link_count, 0, 10, 22, 48)',
-                                'height': 'mapData(link_count, 0, 10, 22, 48)',
-                                
-                                // Glowing Sphere Effect
-                                'border-width': 2.5,
-                                'border-color': 'rgba(255, 255, 255, 0.7)',
-                                'shadow-blur': 22,
-                                'shadow-opacity': 0.95,
-                                'shadow-color': '#ffffff'
+                                'text-margin-y': 6,
+                                'font-size': '10px',
+                                'width': 'mapData(link_count, 0, 10, 16, 36)',
+                                'height': 'mapData(link_count, 0, 10, 16, 36)',
+                                'border-width': 1.5,
+                                'border-color': 'rgba(255, 255, 255, 0.4)',
+                                'shadow-blur': 15,
+                                'shadow-opacity': 0.8,
+                                'shadow-color': '#fff'
                             }
                         },
-                        // Specific Category Colors (guaranteed syntax safety in Cytoscape)
-                        {
-                            selector: 'node[category = "projects"]',
-                            style: {
-                                'background-color': '#3B82F6',
-                                'shadow-color': '#3B82F6'
-                            }
-                        },
-                        {
-                            selector: 'node[category = "areas"]',
-                            style: {
-                                'background-color': '#10B981',
-                                'shadow-color': '#10B981'
-                            }
-                        },
-                        {
-                            selector: 'node[category = "resources"]',
-                            style: {
-                                'background-color': '#FF5252',
-                                'shadow-color': '#FF5252'
-                            }
-                        },
-                        {
-                            selector: 'node[category = "archives"]',
-                            style: {
-                                'background-color': '#F59E0B',
-                                'shadow-color': '#F59E0B'
-                            }
-                        },
-                        // Coloured Linking Way — Gradients on Edges!
+                        { selector: 'node[category = "projects"]', style: { 'background-color': '#3B82F6', 'shadow-color': '#3B82F6' } },
+                        { selector: 'node[category = "areas"]', style: { 'background-color': '#10B981', 'shadow-color': '#10B981' } },
+                        { selector: 'node[category = "resources"]', style: { 'background-color': '#FF5252', 'shadow-color': '#FF5252' } },
+                        { selector: 'node[category = "archives"]', style: { 'background-color': '#F59E0B', 'shadow-color': '#F59E0B' } },
                         {
                             selector: 'edge',
                             style: {
-                                'width': 'mapData(similarity, 0.3, 1.0, 2, 5)',
+                                'width': 'mapData(similarity, 0.3, 1.0, 1.5, 4)',
                                 'curve-style': 'bezier',
                                 'line-color': 'data(source_color)',
                                 'line-fill': 'linear-gradient',
                                 'line-gradient-stop-colors': 'data(gradient_colors)',
                                 'line-gradient-stop-positions': '0 100',
-                                'opacity': 0.85
+                                'opacity': 0.6
                             }
                         },
-                        // Interaction states
-                        {
-                            selector: 'node.highlight',
-                            style: {
-                                'border-width': 4,
-                                'border-color': '#ffffff',
-                                'shadow-blur': 35,
-                                'shadow-color': '#ffffff'
-                            }
-                        },
-                        {
-                            selector: 'node.dim',
-                            style: {
-                                'opacity': 0.2
-                            }
-                        },
-                        {
-                            selector: 'edge.highlight',
-                            style: {
-                                'opacity': 1.0,
-                                'width': 'mapData(similarity, 0.3, 1.0, 3.5, 7)',
-                                'line-color': 'data(target_color)'
-                            }
-                        },
-                        {
-                            selector: 'edge.dim',
-                            style: {
-                                'opacity': 0.1
-                            }
-                        }
+                        { selector: 'node.highlight', style: { 'border-width': 3, 'border-color': '#ffffff', 'shadow-blur': 25, 'shadow-color': '#ffffff', 'color': '#ffffff' } },
+                        { selector: 'node.dim', style: { 'opacity': 0.15 } },
+                        { selector: 'edge.highlight', style: { 'opacity': 0.9, 'width': 'mapData(similarity, 0.3, 1.0, 2.5, 6)', 'line-color': 'data(target_color)' } },
+                        { selector: 'edge.dim', style: { 'opacity': 0.05 } }
                     ],
-
-                    layout: getLayoutConfig(graphData.nodes.length)
+                    layout: { name: 'cose', animate: cyElements.length < 150, animationDuration: 1000, nodeRepulsion: 400000, idealEdgeLength: 100, edgeElasticity: 100, nestingFactor: 5, gravity: 250, padding: 30 }
                 });
 
-                // Layout configuration logic
-                function getLayoutConfig(nodeCount) {
-                    const animate = nodeCount < 100;
-                    return {
-                        name: 'cose',
-                        animate: animate,
-                        animationDuration: 1200,
-                        nodeRepulsion: 450000,
-                        idealEdgeLength: 130,
-                        edgeElasticity: 100,
-                        nestingFactor: 5,
-                        gravity: 220,
-                        numIter: 1000,
-                        padding: 70
-                    };
-                }
-
-                // Interactions
-
-                // Hover (Show tooltip)
                 cy.on('mouseover', 'node', function(e) {
-                    const node = e.target;
-                    const data = node.data();
-                    
-                    // Populate tooltip
+                    const data = e.target.data();
                     document.getElementById('tt-title').textContent = data.full_title;
-                    
-                    // Format date nicely
-                    let dateStr = "Unknown date";
-                    if (data.created) {
-                        try {
-                            const d = new Date(data.created);
-                            dateStr = d.toLocaleDateString();
-                        } catch(e) {}
-                    }
-                    document.getElementById('tt-date').textContent = dateStr;
-                    
-                    document.getElementById('tt-links').textContent = 
-                        `${data.link_count} connection${data.link_count !== 1 ? 's' : ''}`;
-                        
+                    document.getElementById('tt-date').textContent = data.created ? new Date(data.created).toLocaleDateString() : 'Unknown date';
+                    document.getElementById('tt-links').textContent = `${data.link_count} connections`;
                     document.getElementById('tt-summary').textContent = data.summary || "No summary available.";
                     
-                    // Add tags
                     const tagsContainer = document.getElementById('tt-tags');
                     tagsContainer.innerHTML = '';
-                    if (data.tags && data.tags.length > 0) {
-                        data.tags.forEach(tag => {
-                            const span = document.createElement('span');
-                            span.className = 'tag';
-                            span.textContent = '#' + tag;
-                            tagsContainer.appendChild(span);
-                        });
-                    }
+                    (data.tags || []).forEach(tag => {
+                        const span = document.createElement('span');
+                        span.className = 'tag'; span.textContent = '#' + tag;
+                        tagsContainer.appendChild(span);
+                    });
                     
-                    // Show tooltip
-                    const tooltip = document.getElementById('tooltip');
-                    tooltip.style.display = 'block';
+                    document.getElementById('tooltip').style.display = 'block';
                     document.getElementById('cy').style.cursor = 'pointer';
                 });
 
@@ -517,47 +290,21 @@
                     document.getElementById('cy').style.cursor = 'default';
                 });
 
-                // Click (Highlight connected neighbors)
                 cy.on('tap', 'node', function(e) {
                     const node = e.target;
                     cy.elements().removeClass('highlight dim');
                     const neighborhood = node.neighborhood();
-                    
                     cy.elements().difference(neighborhood).not(node).addClass('dim');
                     node.addClass('highlight');
                     neighborhood.addClass('highlight');
                 });
                 
-                // Click background to reset
                 cy.on('tap', function(e) {
-                    if (e.target === cy) {
-                        cy.elements().removeClass('highlight dim');
-                    }
+                    if (e.target === cy) cy.elements().removeClass('highlight dim');
                 });
 
-                // Double click to fit node
-                cy.on('dblclick', 'node', function(e) {
-                    const node = e.target;
-                    cy.animate({
-                        fit: {
-                            eles: node,
-                            padding: 200
-                        },
-                        duration: 500
-                    });
-                });
-
-                // Button Controls
-                document.getElementById('btn-fit').addEventListener('click', () => {
-                    cy.animate({
-                        fit: { padding: 70 },
-                        duration: 500
-                    });
-                });
-
-                document.getElementById('btn-layout').addEventListener('click', () => {
-                    cy.layout(getLayoutConfig(graphData.nodes.length)).run();
-                });
+                document.getElementById('btn-fit').addEventListener('click', () => cy.animate({ fit: { padding: 50 }, duration: 500 }));
+                document.getElementById('btn-layout').addEventListener('click', () => cy.layout({ name: 'cose', animate: true, nodeRepulsion: 400000, idealEdgeLength: 100, edgeElasticity: 100, nestingFactor: 5, gravity: 250, padding: 30 }).run());
             }
         });
     </script>

@@ -1,12 +1,5 @@
 """
-SecondSelf — Streamlit Web Application (Phase 4: The Oracle)
-
-The main user interface for SecondSelf. Provides a sidebar to capture
-new knowledge, and tabs to view the knowledge graph, ask questions via RAG,
-and browse the raw database.
-
-Usage:
-    streamlit run app.py
+SecondSelf — Streamlit Web Application (Minimalist Dashboard UI)
 """
 
 import json
@@ -26,333 +19,430 @@ from build_graph import build_graph
 from ask import ask
 
 # ──────────────────────────────────────────────
-# Setup & Config
+# Setup & Global CSS
 # ──────────────────────────────────────────────
 
 st.set_page_config(
-    page_title="SecondSelf — AI Second Brain",
+    page_title="Second Brain",
     page_icon="🧠",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed"
 )
 
-# Custom CSS for UI polish
+# Deep dark minimalist theme
 st.markdown("""
 <style>
-    /* Main theme matching graph */
+    /* Main Background */
     .stApp {
-        background-color: #0f1115;
-        color: #e2e8f0;
+        background-color: #000000;
+        color: #f3f4f6;
     }
     
-    /* Headers */
-    h1, h2, h3 {
-        color: #f8fafc;
-        font-family: 'Inter', sans-serif;
+    /* Typography */
+    h1, h2, h3, h4, p, span, div {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    h1 { font-size: 2.2rem; font-weight: 600; margin-bottom: 0.2rem; }
+    h2 { font-size: 1.5rem; font-weight: 500; }
+    .subtitle { color: #9ca3af; font-size: 0.95rem; margin-bottom: 2rem; }
+    
+    /* Hide top padding and sidebar toggle */
+    .block-container { padding-top: 1rem; max-width: 1200px; }
+    [data-testid="collapsedControl"] { display: none; }
+    
+    /* Top Navigation Radio Styling */
+    div.stRadio > div[role="radiogroup"] {
+        display: flex;
+        flex-direction: row;
+        gap: 1.5rem;
+        align-items: center;
+        border-bottom: 1px solid #1f2937;
+        padding-bottom: 1rem;
+        margin-bottom: 2rem;
+    }
+    /* Hide the radio circles */
+    div[role="radiogroup"] label div:first-child { display: none; }
+    /* Style the labels */
+    div[role="radiogroup"] label {
+        color: #9ca3af !important;
+        font-size: 0.95rem;
+        font-weight: 500;
+        cursor: pointer;
+        padding: 0 !important;
+        background: transparent !important;
+    }
+    div[role="radiogroup"] label[data-checked="true"] p {
+        color: #f9fafb !important;
+    }
+    /* "🧠 Second Brain" brand look */
+    div[role="radiogroup"] label:first-child {
+        font-weight: 600;
+        color: #f9fafb !important;
+        margin-right: 2rem;
+    }
+
+    /* Metric Cards (Category Grid) */
+    .metric-card {
+        background-color: #0f0f0f;
+        border: 1px solid #262626;
+        border-radius: 8px;
+        padding: 1.25rem;
+        height: 100%;
+    }
+    .metric-value {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: #ffffff;
+        margin-bottom: 0.2rem;
+    }
+    .metric-label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        color: #6b7280;
+        text-transform: uppercase;
+    }
+
+    /* Action Cards */
+    .action-card {
+        background-color: #0f0f0f;
+        border: 1px solid #262626;
+        border-radius: 8px;
+        padding: 1.25rem;
+        height: 100%;
+        cursor: pointer;
+        transition: border-color 0.2s;
+    }
+    .action-card:hover {
+        border-color: #4b5563;
+    }
+    .action-title {
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: #e5e7eb;
+        margin-bottom: 0.5rem;
+    }
+    .action-desc {
+        font-size: 0.85rem;
+        color: #9ca3af;
+        line-height: 1.4;
     }
     
-    /* Buttons */
+    /* Result/Note Cards */
+    .result-card {
+        background-color: #0a0a0a;
+        border: 1px solid #1f2937;
+        border-radius: 8px;
+        padding: 1.25rem;
+        margin-bottom: 1rem;
+        transition: border-color 0.2s;
+    }
+    .result-card:hover { border-color: #374151; }
+    .res-header { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
+    .res-title { font-size: 1.1rem; font-weight: 500; color: #f9fafb; }
+    .res-meta { font-size: 0.75rem; color: #6b7280; }
+    .res-snippet { font-size: 0.9rem; color: #9ca3af; line-height: 1.5; }
+
+    /* Buttons override */
     .stButton>button {
-        background-color: #3b82f6;
-        color: white;
+        background-color: transparent;
+        color: #e5e7eb;
+        border: 1px solid #374151;
         border-radius: 6px;
-        border: none;
-        transition: all 0.2s;
     }
     .stButton>button:hover {
-        background-color: #2563eb;
-        border-color: transparent;
+        border-color: #6b7280;
+        color: #ffffff;
     }
     
-    /* Input fields */
-    .stTextInput>div>div>input, .stTextArea>div>textarea {
-        background-color: rgba(30, 41, 59, 0.5);
-        color: white;
-        border: 1px solid #334155;
-    }
-    
-    /* Chat bubbles */
-    .chat-bubble {
-        padding: 1rem;
+    /* Legend Sidebar in Brain Map */
+    .legend-box {
+        background-color: #0a0a0a;
+        border: 1px solid #1f2937;
         border-radius: 8px;
-        margin-bottom: 1rem;
-        background-color: rgba(30, 41, 59, 0.7);
-        border-left: 4px solid #3b82f6;
+        padding: 1.5rem;
+        height: 600px;
     }
-    
-    /* Sidebar */
-    [data-testid="stSidebar"] {
-        background-color: #1a1e27;
-        border-right: 1px solid #334155;
-    }
+    .legend-title { font-size: 0.85rem; color: #9ca3af; margin-bottom: 1.5rem; line-height: 1.4; }
+    .legend-item { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; font-size: 0.85rem; color: #d1d5db; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; }
 </style>
 """, unsafe_allow_html=True)
 
 
 # ──────────────────────────────────────────────
-# Helper Functions
+# State & Helpers
 # ──────────────────────────────────────────────
 
-@st.cache_data(ttl=5) # Cache for 5s to avoid constant re-reads
-def get_stats():
-    """Calculate dashboard statistics."""
-    stats = {
-        "total_notes": 0,
-        "total_links": 0,
-        "categories": {c: 0 for c in config.PARA_CATEGORIES}
-    }
+if "nav" not in st.session_state:
+    st.session_state.nav = "Dashboard"
+if "selected_note_id" not in st.session_state:
+    st.session_state.selected_note_id = None
+
+@st.cache_data(ttl=5)
+def get_dashboard_data():
+    notes = []
+    categories = {c: 0 for c in config.PARA_CATEGORIES}
+    categories["root"] = 0
+    total_links = 0
     
     if config.WIKI_DIR.exists():
         for json_file in config.WIKI_DIR.rglob("*.json"):
             try:
-                with open(json_file, "r", encoding="utf-8") as f:
+                with open(json_file, "r") as f:
                     data = json.load(f)
                     
-                stats["total_notes"] += 1
-                stats["total_links"] += len(data.get("links", []))
+                cat = data.get("para_category", "root")
+                if cat in categories: categories[cat] += 1
+                else: categories["root"] += 1
                 
-                cat = data.get("para_category")
-                if cat in stats["categories"]:
-                    stats["categories"][cat] += 1
-            except:
-                pass
+                total_links += len(data.get("links", []))
                 
-    # Divide links by 2 since they are bidirectional
-    stats["total_links"] = stats["total_links"] // 2
-    return stats
+                notes.append({
+                    "id": data.get("id", ""),
+                    "title": data.get("title", "Untitled"),
+                    "category": cat,
+                    "timestamp": data.get("timestamp", ""),
+                    "link_count": len(data.get("links", [])),
+                    "summary": data.get("summary", ""),
+                    "tags": data.get("tags", [])
+                })
+            except: pass
+            
+    notes.sort(key=lambda x: x["timestamp"], reverse=True)
+    return {
+        "notes": notes,
+        "categories": categories,
+        "total_notes": len(notes),
+        "total_links": total_links // 2
+    }
 
-def run_full_pipeline(content: str):
-    """Run the entire ingestion pipeline end-to-end."""
-    try:
-        # 1. Capture
-        st.toast("📥 Capturing raw data...", icon="⏳")
-        capture_auto(content)
-        
-        # 2. Classify
-        st.toast("🧠 LLM is categorizing and summarizing...", icon="⏳")
-        classify_all(force_rerun=False)
-        
-        # 3. Embed & Link
-        st.toast("🧮 Computing semantic connections...", icon="⏳")
-        embed_all_notes(force_rerun=False)
-        link_all()
-        
-        # 4. Rebuild Graph
-        st.toast("🗺️ Rebuilding knowledge graph...", icon="⏳")
-        build_graph()
-        
-        st.success("✅ Capture successfully integrated into your Second Brain!")
-        # Clear caches so stats and graph update
-        st.cache_data.clear()
-        time.sleep(1)
+def get_note_by_id(note_id):
+    if config.WIKI_DIR.exists():
+        for json_file in config.WIKI_DIR.rglob("*.json"):
+            if note_id in json_file.name:
+                with open(json_file, "r") as f:
+                    return json.load(f)
+    return None
+
+def change_nav(page):
+    st.session_state.nav = page
+
+# ──────────────────────────────────────────────
+# Navigation Header
+# ──────────────────────────────────────────────
+
+nav_options = ["🧠 Second Brain", "Dashboard", "Brain Map", "Ask", "Capture"]
+selected_nav = st.radio(
+    "Navigation", 
+    nav_options,
+    horizontal=True, 
+    label_visibility="collapsed",
+    index=nav_options.index(st.session_state.nav) if st.session_state.nav in nav_options else 1
+)
+
+if selected_nav == "🧠 Second Brain":
+    selected_nav = "Dashboard"
+    
+st.session_state.nav = selected_nav
+
+# ──────────────────────────────────────────────
+# Page Renderers
+# ──────────────────────────────────────────────
+
+if st.session_state.selected_note_id:
+    # NOTE DETAILS VIEW
+    note = get_note_by_id(st.session_state.selected_note_id)
+    if st.button("← Back"):
+        st.session_state.selected_note_id = None
         st.rerun()
         
-    except Exception as e:
-        st.error(f"Pipeline failed: {e}")
-
-
-# ──────────────────────────────────────────────
-# Sidebar
-# ──────────────────────────────────────────────
-
-with st.sidebar:
-    st.title("🧠 SecondSelf")
-    st.markdown("Your autonomous AI Second Brain.")
-    st.divider()
-    
-    # Capture Form
-    st.subheader("📥 Capture Knowledge")
-    st.caption("⚠️ *Note: On Streamlit Cloud, captured data is temporary.*")
-    
-    capture_input = st.text_area(
-        "Content", 
-        placeholder="Paste text, thoughts, or URLs here...",
-        height=100,
-        label_visibility="collapsed"
-    )
-    
-    if st.button("Capture & Process", use_container_width=True):
-        if not capture_input.strip():
-            st.warning("Please enter some content to capture.")
+    if note:
+        cat = note.get('para_category', 'ROOT').upper()
+        title = note.get('title', 'Untitled')
+        date = note.get('timestamp', '').split('T')[0]
+        tags = " ".join([f"#{t}" for t in note.get('tags', [])])
+        
+        st.markdown(f"<div style='color:#9ca3af;font-size:0.8rem;letter-spacing:0.05em;margin-bottom:0.5rem;'>{cat}</div>", unsafe_allow_html=True)
+        st.markdown(f"<h1 style='margin-bottom:0.5rem;'>{title}</h1>", unsafe_allow_html=True)
+        st.markdown(f"<div style='color:#6b7280;font-size:0.85rem;margin-bottom:2rem;'>{tags} • created {date}</div>", unsafe_allow_html=True)
+        
+        st.markdown(f"<div style='border-left: 2px solid #374151; padding-left: 1rem; color: #9ca3af; margin-bottom: 2rem; font-style: italic;'>AI-Generated Summary</div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='font-size:1.05rem; line-height: 1.6; color: #d1d5db; margin-bottom: 3rem;'>{note.get('summary', 'No content available.')}</div>", unsafe_allow_html=True)
+        
+        st.markdown("### Related")
+        links = note.get('links', [])
+        if links:
+            for l in links:
+                st.markdown(f"- **{l}**")
         else:
-            with st.spinner("Processing..."):
-                run_full_pipeline(capture_input)
-                
-    st.divider()
-    
-    # Stats Dashboard
-    st.subheader("📊 Dashboard")
-    stats = get_stats()
-    
-    col1, col2 = st.columns(2)
-    col1.metric("Notes", stats["total_notes"])
-    col2.metric("Connections", stats["total_links"])
-    
-    st.caption("Distribution")
-    for cat, count in stats["categories"].items():
-        st.progress(
-            count / max(1, stats["total_notes"]), 
-            text=f"{cat.capitalize()}: {count}"
-        )
-        
-    st.divider()
-    
-    # Settings
-    st.subheader("⚙️ Settings")
-    sim_threshold = st.slider(
-        "Similarity Threshold", 
-        min_value=0.3, max_value=0.9, value=0.65, step=0.05,
-        help="Higher = stricter links, Lower = more loose connections"
-    )
-    top_k = st.slider(
-        "RAG Top-K", 
-        min_value=1, max_value=10, value=5, step=1,
-        help="Number of notes to retrieve for answering questions"
-    )
-    
-    # Small rebuild button
-    if st.button("🔄 Force Rebuild Graph", use_container_width=True):
-        build_graph()
-        st.cache_data.clear()
-        st.rerun()
-
-
-# ──────────────────────────────────────────────
-# Main Interface (Tabs)
-# ──────────────────────────────────────────────
-
-tab1, tab2, tab3 = st.tabs(["🗺️ Knowledge Graph", "🔮 Ask Your Brain", "📚 Browse Notes"])
-
-# --- TAB 1: KNOWLEDGE GRAPH ---
-with tab1:
-    st.header("Visual Explorer")
-    
-    # Check if graph.html/graph_template.html exists
-    html_path = Path("graph_template.html")
-    if html_path.exists():
-        with open(html_path, "r", encoding="utf-8") as f:
-            html_content = f.read()
+            st.markdown("<span style='color:#6b7280;'>No outbound connections.</span>", unsafe_allow_html=True)
             
-        # We need to inject the actual graph data into the HTML since 
-        # Streamlit components run in an iframe and might not load external local JS files correctly
-        try:
-            with open("graph.json", "r", encoding="utf-8") as f:
-                graph_json_str = f.read()
-                
-            # Replace local script tag directly with inline JSON payload
-            injection = f"<script>const graphData = {graph_json_str};</script>"
-            if '<script src="graph.js"></script>' in html_content:
-                html_content = html_content.replace('<script src="graph.js"></script>', injection)
-            else:
-                html_content = html_content.replace("</head>", f"{injection}\n</head>")
-            
-            components.html(html_content, height=650, scrolling=False)
-        except FileNotFoundError:
-            st.warning("graph.json not found. Click 'Force Rebuild Graph' in the sidebar.")
     else:
-        st.warning("graph_template.html not found.")
+        st.error("Note not found.")
 
-# --- TAB 2: ASK YOUR BRAIN (RAG) ---
-with tab2:
-    st.header("The Oracle")
-    st.markdown("Ask natural language questions. I will answer based *strictly* on your captured knowledge.")
+elif selected_nav == "Dashboard":
+    data = get_dashboard_data()
     
-    # Init session state for chat history
-    if "chat_history" not in st.session_state:
-        st.session_state.chat_history = []
-        
-    if not os.getenv("GROQ_API_KEY"):
-        st.warning("⚠️ **GROQ_API_KEY is missing!** Please add it to your Streamlit App Secrets to use the Oracle.")
-        st.stop()
-        
-    # Input box
-    question = st.chat_input("What do you want to know about your notes?")
+    st.markdown("<h1>Your Second Brain</h1>", unsafe_allow_html=True)
+    st.markdown(f"<div class='subtitle'>{data['total_notes']} pages across {len([k for k,v in data['categories'].items() if v>0])} categories.</div>", unsafe_allow_html=True)
     
-    if question:
-        # Add to history
-        st.session_state.chat_history.append({"role": "user", "content": question})
-        
-        with st.spinner("Searching brain..."):
-            # Run RAG
-            # Temporarily patch config if settings were changed
-            config.SIMILARITY_THRESHOLD = sim_threshold
-            result = ask(question, top_k=top_k)
+    # Category Grid (3 cols)
+    cats = {k: v for k, v in data['categories'].items() if v > 0}
+    # Add some empty stubs to match screenshot aesthetic if few categories
+    if len(cats) < 4:
+        for extra in ["concepts", "events", "daily", "goals", "people"]:
+            if extra not in cats: cats[extra] = 0
             
-            # Format answer
-            answer_content = result["answer"]
+    sorted_cats = sorted(cats.items(), key=lambda x: x[1], reverse=True)
+    
+    # Render Grid
+    cols = st.columns(4)
+    for i, (cat, count) in enumerate(sorted_cats[:8]):
+        with cols[i % 4]:
+            st.markdown(f"""
+            <div class="metric-card">
+                <div class="metric-value">{count}</div>
+                <div class="metric-label">{cat}</div>
+            </div>
+            <br>
+            """, unsafe_allow_html=True)
+            
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    # Action Cards
+    c1, c2, c3 = st.columns(3)
+    with c1:
+        st.markdown("""<div class="action-card">
+            <div class="action-title">Brain Map →</div>
+            <div class="action-desc">Explore the graph of every page and how they link together.</div>
+        </div>""", unsafe_allow_html=True)
+    with c2:
+        st.markdown("""<div class="action-card">
+            <div class="action-title">Ask →</div>
+            <div class="action-desc">Semantic search over everything you've captured.</div>
+        </div>""", unsafe_allow_html=True)
+    with c3:
+        st.markdown("""<div class="action-card">
+            <div class="action-title">Capture →</div>
+            <div class="action-desc">Drop a quick note into your inbox for later ingest.</div>
+        </div>""", unsafe_allow_html=True)
+        
+    st.markdown("<br><br>", unsafe_allow_html=True)
+    
+    # Unlinked & Recent Activity
+    st.markdown("<div style='color:#6b7280;font-size:0.75rem;font-weight:600;letter-spacing:0.05em;margin-bottom:1rem;'>UNLINKED NOTES</div>", unsafe_allow_html=True)
+    unlinked = [n for n in data["notes"] if n["link_count"] == 0]
+    if unlinked:
+        for u in unlinked[:3]:
+            if st.button(f"📄 {u['title']}", key=f"stub_{u['id']}"):
+                st.session_state.selected_note_id = u['id']
+                st.rerun()
+    else:
+        st.markdown("<span style='color:#374151;'>All notes are connected!</span>", unsafe_allow_html=True)
+
+    st.markdown("<br><div style='color:#6b7280;font-size:0.75rem;font-weight:600;letter-spacing:0.05em;margin-bottom:1rem;'>RECENT ACTIVITY</div>", unsafe_allow_html=True)
+    for n in data["notes"][:5]:
+        with st.container():
+            col1, col2 = st.columns([4, 1])
+            with col1:
+                st.markdown(f"<div style='font-size:0.9rem; color:#9ca3af;'>• <b>{n['title']}</b> - {n['summary'][:100]}...</div>", unsafe_allow_html=True)
+            with col2:
+                if st.button("View", key=f"rec_{n['id']}"):
+                    st.session_state.selected_note_id = n['id']
+                    st.rerun()
+
+elif selected_nav == "Brain Map":
+    data = get_dashboard_data()
+    st.markdown("<h1>Brain Map</h1>", unsafe_allow_html=True)
+    st.markdown(f"<div class='subtitle'>{data['total_notes']} pages, {data['total_links']} links — built live from every link in the vault.</div>", unsafe_allow_html=True)
+    
+    c1, c2 = st.columns([3, 1])
+    
+    with c1:
+        # Embed Cytoscape
+        html_path = Path("graph_template.html")
+        if html_path.exists():
+            with open(html_path, "r", encoding="utf-8") as f:
+                html_content = f.read()
+            try:
+                with open("graph.json", "r", encoding="utf-8") as f:
+                    graph_json_str = f.read()
+                injection = f"<script>const graphData = {graph_json_str};</script>"
+                if '<script src="graph.js"></script>' in html_content:
+                    html_content = html_content.replace('<script src="graph.js"></script>', injection)
+                else:
+                    html_content = html_content.replace("</head>", f"{injection}\n</head>")
+                components.html(html_content, height=600, scrolling=False)
+            except:
+                st.warning("Missing graph.json")
+        else:
+            st.warning("graph_template.html missing")
+            
+    with c2:
+        # Side Legend
+        colors = {
+            "root": "#9ca3af", "people": "#f59e0b", "places": "#10b981", 
+            "events": "#eab308", "finance": "#06b6d4", "career": "#8b5cf6",
+            "health": "#ef4444", "projects": "#3b82f6", "goals": "#ec4899",
+            "decisions": "#14b8a6", "daily": "#64748b", "concepts": "#6366f1"
+        }
+        
+        legend_html = "<div class='legend-box'><div class='legend-title'>Click a node to preview the page. Colors group pages by category; drag to rearrange, scroll to zoom.</div><hr style='border-color:#1f2937; margin-bottom: 20px;'>"
+        for cat, color in colors.items():
+            legend_html += f"<div class='legend-item'><div class='dot' style='background-color: {color}; box-shadow: 0 0 8px {color};'></div> {cat}</div>"
+        legend_html += "</div>"
+        st.markdown(legend_html, unsafe_allow_html=True)
+        
+        if st.button("🔄 Rebuild Graph", use_container_width=True):
+            build_graph()
+            st.rerun()
+
+elif selected_nav == "Ask":
+    st.markdown("<h1>Ask your second brain</h1>", unsafe_allow_html=True)
+    st.markdown("<div class='subtitle'>Semantic search over every page, run locally against embeddings.</div>", unsafe_allow_html=True)
+    
+    if not os.getenv("GROQ_API_KEY"):
+        st.warning("⚠️ GROQ_API_KEY is missing in environment/secrets!")
+    
+    query = st.text_input("Search", placeholder="What did his February blood report flag?", label_visibility="collapsed")
+    
+    if query:
+        with st.spinner("Searching..."):
+            result = ask(query, top_k=6)
             sources = result.get("sources", [])
             
-            st.session_state.chat_history.append({
-                "role": "assistant", 
-                "content": answer_content,
-                "sources": sources,
-                "confidence": result.get("confidence", "none")
-            })
-            
-    # Render chat history
-    for msg in st.session_state.chat_history:
-        if msg["role"] == "user":
-            with st.chat_message("user"):
-                st.write(msg["content"])
-        else:
-            with st.chat_message("assistant", avatar="🧠"):
-                st.write(msg["content"])
+            for src in sources:
+                # Mock percentage for aesthetic based on sim score
+                sim = float(src['similarity'])
+                pct = int(sim * 100)
+                cat = "root" # We don't return category in ask.py currently, fallback to root
                 
-                # Show sources if any exist
-                sources = msg.get("sources", [])
-                if sources:
-                    conf = msg.get("confidence", "none")
-                    color = "green" if conf == "high" else "orange" if conf == "medium" else "gray"
-                    
-                    with st.expander(f"📚 View Sources (Confidence: {conf})"):
-                        for src in sources:
-                            st.markdown(f"- **{src['title']}** (sim: {src['similarity']})")
+                st.markdown(f"""
+                <div class="result-card">
+                    <div class="res-header">
+                        <div class="res-title">{src['title']}</div>
+                        <div class="res-meta">{pct}% match · {cat}</div>
+                    </div>
+                    <div class="res-snippet">{src['snippet']}</div>
+                </div>
+                """, unsafe_allow_html=True)
 
-# --- TAB 3: BROWSE NOTES ---
-with tab3:
-    st.header("Raw Database")
+elif selected_nav == "Capture":
+    st.markdown("<h1>Capture</h1>", unsafe_allow_html=True)
+    st.markdown("<div class='subtitle'>Drop a quick note into your inbox for later ingest.</div>", unsafe_allow_html=True)
+    st.caption("⚠️ Note: On Cloud, captured data is temporary.")
     
-    # Load all notes into a pandas dataframe
-    all_notes = []
-    if config.WIKI_DIR.exists():
-        for json_file in config.WIKI_DIR.rglob("*.json"):
-            try:
-                with open(json_file, "r", encoding="utf-8") as f:
-                    data = json.load(f)
-                    all_notes.append({
-                        "Title": data.get("title", "Untitled"),
-                        "Category": data.get("para_category", "").capitalize(),
-                        "Tags": ", ".join(data.get("tags", [])),
-                        "Date": data.get("timestamp", "").split("T")[0],
-                        "Summary": data.get("summary", ""),
-                        "ID": data.get("id", "")
-                    })
-            except:
-                pass
-                
-    if all_notes:
-        df = pd.DataFrame(all_notes)
-        
-        # Add filters
-        col1, col2 = st.columns(2)
-        with col1:
-            cat_filter = st.selectbox("Filter by Category", ["All"] + [c.capitalize() for c in config.PARA_CATEGORIES])
-        with col2:
-            search_filter = st.text_input("Search notes...", placeholder="Type to search...")
-            
-        # Apply filters
-        if cat_filter != "All":
-            df = df[df["Category"] == cat_filter]
-        if search_filter:
-            df = df[df["Title"].str.contains(search_filter, case=False, na=False) | 
-                    df["Summary"].str.contains(search_filter, case=False, na=False)]
-                    
-        st.dataframe(
-            df[["Title", "Category", "Tags", "Date"]],
-            use_container_width=True,
-            hide_index=True
-        )
-        
-        st.caption(f"Showing {len(df)} notes.")
-    else:
-        st.info("No notes found. Capture some knowledge in the sidebar!")
+    content = st.text_area("Content", placeholder="Paste thoughts, links, or text...", height=200, label_visibility="collapsed")
+    
+    if st.button("Capture & Process", type="primary"):
+        if content.strip():
+            with st.spinner("Processing through AI pipeline..."):
+                capture_auto(content)
+                classify_all(force_rerun=False)
+                embed_all_notes(force_rerun=False)
+                link_all()
+                build_graph()
+                st.success("Successfully captured and linked into your Second Brain!")
+        else:
+            st.warning("Enter some content.")
