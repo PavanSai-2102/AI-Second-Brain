@@ -18,13 +18,13 @@
       "target_id": "cap_20260716_39c1c42c",
       "target_title": "Cosine Similarity in NLP",
       "similarity": 0.443,
-      "linked_at": "2026-07-16T21:09:56.274382+05:30"
+      "linked_at": "2026-07-25T12:05:55.343053+05:30"
     },
     {
       "target_id": "cap_20260716_1fc9db3a",
       "target_title": "all-MiniLM-L6-v2 Model Card",
       "similarity": 0.379,
-      "linked_at": "2026-07-16T21:09:56.274382+05:30"
+      "linked_at": "2026-07-25T12:05:55.343053+05:30"
     }
   ],
   "embedding": [

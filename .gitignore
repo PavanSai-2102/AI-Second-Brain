@@ -29,3 +29,6 @@ build/
 # Sentence-transformers model cache (downloaded on first run)
 # Uncomment if you don't want to track the model cache
 # .cache/
+
+# Obsidian Vault (exported Markdown)
+obsidian_vault/

@@ -1,10 +1,25 @@
 const graphData = {
   "metadata": {
-    "generated_at": "2026-07-18T08:13:20.150425+05:30",
-    "total_nodes": 11,
+    "generated_at": "2026-07-26T19:32:33.448871+05:30",
+    "total_nodes": 15,
     "total_edges": 4
   },
   "nodes": [
+    {
+      "id": "cap_20260725_dedbd271",
+      "label": "I should learn more ab...",
+      "full_title": "I should learn more about Artificial Intelligence...",
+      "category": "areas",
+      "tags": [
+        "Artificial Intelligence",
+        "machine learning",
+        "personal development"
+      ],
+      "summary": "Learning Artificial Intelligence and machine learning",
+      "content_preview": "I should learn more about Artificial Intelligence and machine learning.",
+      "created": "2026-07-25T12:01:11.892583+05:30",
+      "link_count": 0
+    },
     {
       "id": "cap_20260716_ea0a354f",
       "label": "Streamlit Main Concepts",
@@ -20,6 +35,21 @@ const graphData = {
       "content_preview": "URL: https://docs.streamlit.io/get-started/fundamentals/main-concepts\n\nBasic concepts of Streamlit - Streamlit Docs\nBasic concepts of Streamlit\nWorking with Streamlit is simple. First you sprinkle a f...",
       "created": "2026-07-16T20:57:57.276465+05:30",
       "link_count": 1
+    },
+    {
+      "id": "cap_20260726_0a9031df",
+      "label": "https://www.linkedin.c...",
+      "full_title": "https://www.linkedin.com/in/pavansai-profile/",
+      "category": "resources",
+      "tags": [
+        "linkedin",
+        "profile",
+        "contact"
+      ],
+      "summary": "Pavan Sai's LinkedIn profile URL",
+      "content_preview": "URL: https://www.linkedin.com/in/pavansai-profile/",
+      "created": "2026-07-26T13:59:29.500411+05:30",
+      "link_count": 0
     },
     {
       "id": "cap_20260716_39c1c42c",
@@ -112,6 +142,21 @@ const graphData = {
       "link_count": 0
     },
     {
+      "id": "cap_20260726_92a61e55",
+      "label": "Pavan Sai Data Analyst...",
+      "full_title": "Pavan Sai Data Analyst Resume 2026",
+      "category": "resources",
+      "tags": [
+        "resume",
+        "pdf",
+        "data analyst"
+      ],
+      "summary": "A PDF file containing a data analyst resume",
+      "content_preview": "[PDF: Pavan_Sai_Data_Analyst_Resume_2026.pdf]\nPyPDF2 not installed — cannot extract text.",
+      "created": "2026-07-26T13:55:42.667906+05:30",
+      "link_count": 0
+    },
+    {
       "id": "cap_20260716_99bda3a6",
       "label": "PARA Method Overview",
       "full_title": "PARA Method Overview",
@@ -124,6 +169,21 @@ const graphData = {
       "summary": "Overview of the PARA method for information organization",
       "content_preview": "The PARA method organizes information into four categories: Projects (active goals), Areas (ongoing responsibilities), Resources (reference material), and Archives (completed items). Created by Tiago ...",
       "created": "2026-07-16T20:57:26.587779+05:30",
+      "link_count": 0
+    },
+    {
+      "id": "cap_20260718_ea360436",
+      "label": "Google Colab",
+      "full_title": "Google Colab",
+      "category": "resources",
+      "tags": [
+        "Google Colab",
+        "URL",
+        "Reference"
+      ],
+      "summary": "Google Colab URL for future reference",
+      "content_preview": "URL: https://colab.research.google.com/drive/16SSOCuaKcs4b0Dt67SZVrdwq7Zgd8i1S?usp=sharing\n\nGoogle Colab\nSign in",
+      "created": "2026-07-18T12:44:11.381787+05:30",
       "link_count": 0
     },
     {
