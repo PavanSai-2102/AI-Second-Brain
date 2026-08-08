@@ -60,8 +60,7 @@ st.markdown("""
         padding-bottom: 1rem;
         margin-bottom: 2rem;
     }
-    /* Hide the radio circles */
-    div[role="radiogroup"] label div:first-child { display: none; }
+    /* (Radio circles are kept visible for compatibility) */
     /* Style the labels */
     div[role="radiogroup"] label {
         color: #9ca3af !important;
