@@ -47,7 +47,7 @@ st.markdown("""
     .subtitle { color: #9ca3af; font-size: 0.95rem; margin-bottom: 2rem; }
     
     /* Hide top padding and sidebar toggle */
-    .block-container { padding-top: 1rem; max-width: 1200px; }
+    .block-container { padding-top: 4rem; max-width: 1200px; }
     [data-testid="collapsedControl"] { display: none; }
     
     /* Top Navigation Radio Styling */
