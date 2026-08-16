@@ -427,7 +427,7 @@ elif selected_nav == "Ask":
                         <div class="res-title">{src['title']}</div>
                         <div class="res-meta">{pct}% match · {cat}</div>
                     </div>
-                    <div class="res-snippet">{src['snippet']}</div>
+                    <div class="res-snippet"></div>
                 </div>
                 """, unsafe_allow_html=True)
 
