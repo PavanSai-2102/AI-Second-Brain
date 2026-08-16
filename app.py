@@ -326,25 +326,7 @@ elif selected_nav == "Dashboard":
             
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # Action Cards
-    c1, c2, c3 = st.columns(3)
-    with c1:
-        st.markdown("""<div class="action-card">
-            <div class="action-title">Brain Map →</div>
-            <div class="action-desc">Explore the graph of every page and how they link together.</div>
-        </div>""", unsafe_allow_html=True)
-    with c2:
-        st.markdown("""<div class="action-card">
-            <div class="action-title">Ask →</div>
-            <div class="action-desc">Semantic search over everything you've captured.</div>
-        </div>""", unsafe_allow_html=True)
-    with c3:
-        st.markdown("""<div class="action-card">
-            <div class="action-title">Capture →</div>
-            <div class="action-desc">Drop a quick note into your inbox for later ingest.</div>
-        </div>""", unsafe_allow_html=True)
-        
-    st.markdown("<br><br>", unsafe_allow_html=True)
+
     
     # Unlinked & Recent Activity
     st.markdown("<div style='color:#6b7280;font-size:0.75rem;font-weight:600;letter-spacing:0.05em;margin-bottom:1rem;'>UNLINKED NOTES</div>", unsafe_allow_html=True)
