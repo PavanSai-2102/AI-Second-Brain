@@ -236,7 +236,7 @@ with nav_container:
     cols = st.columns([2, 1, 1, 1, 1, 5])
     
     with cols[0]:
-        st.markdown("<h3 style="margin:0; font-size: 1.1rem; padding-top: 5px;">🧠 Second Brain</h3>", unsafe_allow_html=True)
+        st.markdown("<h3 style='margin:0; font-size: 1.1rem; padding-top: 5px;'>🧠 Second Brain</h3>", unsafe_allow_html=True)
     
     with cols[1]:
         if st.button("Dashboard", type="primary" if st.session_state.nav == "Dashboard" else "secondary", use_container_width=True):
@@ -258,7 +258,7 @@ with nav_container:
             st.session_state.nav = "Capture"
             st.rerun()
 
-st.markdown("<div style="border-bottom: 1px solid #1f2937; margin-bottom: 2rem;"></div>", unsafe_allow_html=True)
+st.markdown("<div style='border-bottom: 1px solid #1f2937; margin-bottom: 2rem;'></div>", unsafe_allow_html=True)
 
 selected_nav = st.session_state.nav
 
