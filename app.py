@@ -231,19 +231,36 @@ def change_nav(page):
 # Navigation Header
 # ──────────────────────────────────────────────
 
-nav_options = ["🧠 Second Brain", "Dashboard", "Brain Map", "Ask", "Capture"]
-selected_nav = st.radio(
-    "Navigation", 
-    nav_options,
-    horizontal=True, 
-    label_visibility="collapsed",
-    index=nav_options.index(st.session_state.nav) if st.session_state.nav in nav_options else 1
-)
-
-if selected_nav == "🧠 Second Brain":
-    selected_nav = "Dashboard"
+nav_container = st.container()
+with nav_container:
+    cols = st.columns([2, 1, 1, 1, 1, 5])
     
-st.session_state.nav = selected_nav
+    with cols[0]:
+        st.markdown("<h3 style="margin:0; font-size: 1.1rem; padding-top: 5px;">🧠 Second Brain</h3>", unsafe_allow_html=True)
+    
+    with cols[1]:
+        if st.button("Dashboard", type="primary" if st.session_state.nav == "Dashboard" else "secondary", use_container_width=True):
+            st.session_state.nav = "Dashboard"
+            st.rerun()
+            
+    with cols[2]:
+        if st.button("Brain Map", type="primary" if st.session_state.nav == "Brain Map" else "secondary", use_container_width=True):
+            st.session_state.nav = "Brain Map"
+            st.rerun()
+            
+    with cols[3]:
+        if st.button("Ask", type="primary" if st.session_state.nav == "Ask" else "secondary", use_container_width=True):
+            st.session_state.nav = "Ask"
+            st.rerun()
+            
+    with cols[4]:
+        if st.button("Capture", type="primary" if st.session_state.nav == "Capture" else "secondary", use_container_width=True):
+            st.session_state.nav = "Capture"
+            st.rerun()
+
+st.markdown("<div style="border-bottom: 1px solid #1f2937; margin-bottom: 2rem;"></div>", unsafe_allow_html=True)
+
+selected_nav = st.session_state.nav
 
 # ──────────────────────────────────────────────
 # Page Renderers
@@ -404,9 +421,14 @@ elif selected_nav == "Ask":
     if not os.getenv("GROQ_API_KEY"):
         st.warning("⚠️ GROQ_API_KEY is missing in environment/secrets!")
     
-    query = st.text_input("Search", placeholder="What did his February blood report flag?", label_visibility="collapsed")
-    
-    if query:
+    with st.form(key="ask_form"):
+        cols = st.columns([5, 1])
+        with cols[0]:
+            query = st.text_input("Search", placeholder="What did his February blood report flag?", label_visibility="collapsed")
+        with cols[1]:
+            submit = st.form_submit_button("Ask", use_container_width=True)
+            
+    if submit and query:
         with st.spinner("Searching..."):
             result = ask(query, top_k=6)
             sources = result.get("sources", [])
